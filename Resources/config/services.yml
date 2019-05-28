@@ -1,0 +1,34 @@
+parameters:
+  adw.sonata.chunks.storage.filesystem.class: ADW\SonataMediaChunkUploader\Storage\FilesystemStorage
+
+services:
+  # Set autowiring
+  ADW\SonataMediaChunkUploader\Service\ChunkService: '@adw.sonata.chunks.service'
+  ADW\SonataMediaChunkUploader\Storage\FilesystemStorage: '@adw.sonata.chunks.storage'
+
+  adw.sonata.chunks.service:
+    class: ADW\SonataMediaChunkUploader\Service\ChunkService
+    public: true
+    arguments:
+      - "%adw.sonata.chunks.settings%"
+      - "@adw.sonata.chunks.storage"
+
+  adw.sonata.chunks.form.large_media:
+    class: ADW\SonataMediaChunkUploader\Form\Type\LargeMediaType
+    arguments: ['@sonata.media.pool', "%sonata.media.media.class%"]
+    tags: [form.type]
+
+  sonata.media.provider.large_file:
+    class: ADW\SonataMediaChunkUploader\Provider\LargeFileProvider
+    tags:
+      - { name: sonata.media.provider }
+    arguments:
+      - 'sonata.media.provider.large_file'
+      - '@sonata.media.filesystem.local'
+      - '@sonata.media.cdn.server'
+      - '@sonata.media.generator.default'
+      - '@sonata.media.thumbnail.format'
+      - []
+      - []
+    calls:
+      - [ setTemplates, [ { helper_thumbnail: "@@SonataMedia/Provider/thumbnail.html.twig", helper_view: "@@SonataMedia/Provider/view_file.html.twig" } ]]

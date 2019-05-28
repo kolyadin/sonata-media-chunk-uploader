@@ -25,6 +25,13 @@ adw_chunk_uploader:
     type:     annotation
 ```
 
+Add custom widget to twig config:
+```
+twig:
+    form_themes:
+        - '@ADWSonataMediaChunkUploader/Form/fields.html.twig'
+```
+
 ## Configuration (optional)
 ```
 adw_sonata_media_chunk_uploader:
