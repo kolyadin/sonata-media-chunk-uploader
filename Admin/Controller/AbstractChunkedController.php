@@ -47,10 +47,8 @@ abstract class AbstractChunkedController extends AbstractController
      *
      * @return mixed
      */
-    protected function handleChunkedUpload(UploadedFile $file, Request $request)
+    protected function handleChunkedUpload(UploadedFile $file, Request $request, ChunkServiceInterface $chunkManager)
     {
-        $chunkManager = $this->container->get('adw.sonata.chunks.service');
-
         // get information about this chunked request
         [ $last, $uuid, $index, $orig ] = $this->parseChunkedRequest($request);
 

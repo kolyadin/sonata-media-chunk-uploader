@@ -21,6 +21,12 @@ class LargeMediaType extends MediaType
 {
     protected $class;
 
+    /**
+     * LargeMediaType constructor.
+     *
+     * @param Pool $pool
+     * @param      $class
+     */
     public function __construct(Pool $pool, $class)
     {
         $this->class = $class;
@@ -28,6 +34,10 @@ class LargeMediaType extends MediaType
         parent::__construct($pool, $class);
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -48,6 +58,9 @@ class LargeMediaType extends MediaType
 
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

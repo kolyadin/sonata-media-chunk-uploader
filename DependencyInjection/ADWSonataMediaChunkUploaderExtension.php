@@ -7,6 +7,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * Class ADWSonataMediaChunkUploaderExtension
+ * @package ADW\SonataMediaChunkUploader\DependencyInjection
+ */
 class ADWSonataMediaChunkUploaderExtension extends Extension
 {
     /**
@@ -24,6 +28,10 @@ class ADWSonataMediaChunkUploaderExtension extends Extension
      */
     protected $config;
 
+    /**
+     * @param array            $configs
+     * @param ContainerBuilder $container
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $this->container = $container;
@@ -31,15 +39,11 @@ class ADWSonataMediaChunkUploaderExtension extends Extension
         $configuration = new Configuration();
         $this->config  = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('adw.sonata.chunks.settings', $this->config['chunks']);
-        $this->registerStorageService();
-
         $loader = new Loader\YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        $this->addAnnotatedClassesToCompile([
-            'ADW\\SonataMediaChunkUploader\\Service\\ChunkService'
-        ]);
+        $container->setParameter('adw.sonata.chunks.settings', $this->config['chunks']);
+        $this->registerStorageService();
     }
 
     protected function registerStorageService()

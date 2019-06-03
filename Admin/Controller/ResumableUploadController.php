@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use ADW\SonataMediaChunkUploader\Service\ChunkService;
 
 /**
  * Class ResumableUploadController
@@ -14,6 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ResumableUploadController extends AbstractChunkedController
 {
+
+    protected $chunkManager;
+
+    public function __construct(ChunkService $chunkManager)
+    {
+        $this->chunkManager = $chunkManager;
+    }
+
     /**
      * @Route("/upload", name="adw.chunks.upload", methods={"POST"})
      *
@@ -28,7 +37,7 @@ class ResumableUploadController extends AbstractChunkedController
 
         foreach($files as $file) {
             try {
-                $path = $this->handleChunkedUpload($file, $request);
+                $path = $this->handleChunkedUpload($file, $request, $this->chunkManager);
             } catch (\Exception $exception) {
                 return new Response($exception->getMessage(), 403);
             }
@@ -37,6 +46,11 @@ class ResumableUploadController extends AbstractChunkedController
         return new JsonResponse(['message' => 'success', 'file' => $path ? $path : 'processing.'], Response::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
     protected function parseChunkedRequest(Request $request)
     {
         $session = $this->container->get('session');
