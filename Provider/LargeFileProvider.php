@@ -40,23 +40,27 @@ class LargeFileProvider extends BaseProvider
 
     protected $metadata;
 
+    protected $directory;
+
     /**
      * @param string                   $name
      * @param Filesystem               $filesystem
      * @param CDNInterface             $cdn
      * @param GeneratorInterface       $pathGenerator
      * @param ThumbnailInterface       $thumbnail
+     * @param string                   $directory
      * @param array                    $allowedExtensions
      * @param array                    $allowedMimeTypes
      * @param MetadataBuilderInterface $metadata
      */
-    public function __construct($name, Filesystem $filesystem, CDNInterface $cdn, GeneratorInterface $pathGenerator, ThumbnailInterface $thumbnail, array $allowedExtensions = [], array $allowedMimeTypes = [], MetadataBuilderInterface $metadata = null)
+    public function __construct($name, Filesystem $filesystem, CDNInterface $cdn, GeneratorInterface $pathGenerator, ThumbnailInterface $thumbnail, string $directory, array $allowedExtensions = [], array $allowedMimeTypes = [], MetadataBuilderInterface $metadata = null)
     {
         parent::__construct($name, $filesystem, $cdn, $pathGenerator, $thumbnail);
 
         $this->allowedExtensions = $allowedExtensions;
         $this->allowedMimeTypes = $allowedMimeTypes;
         $this->metadata = $metadata;
+        $this->directory = $directory;
     }
 
     /**
@@ -72,8 +76,7 @@ class LargeFileProvider extends BaseProvider
      */
     public function getReferenceImage(MediaInterface $media)
     {
-        return sprintf('%s/%s',$this->generatePath($media),$media->getProviderReference()
-        );
+        return sprintf('%s/%s',$this->generatePath($media),$media->getProviderReference());
     }
 
     /**
@@ -406,7 +409,7 @@ class LargeFileProvider extends BaseProvider
      */
     protected function setFileContents(MediaInterface $media, $contents = null)
     {
-        $symfonyFilesystem = new SymfonyFilesystem();
+        $filesystem = new SymfonyFilesystem();
 
         $pathToMove = sprintf('%s/%s', $this->generatePath($media), $media->getProviderReference());
         $file       = $this->getFilesystem()->get($pathToMove, true);
@@ -421,8 +424,9 @@ class LargeFileProvider extends BaseProvider
         $binaryContent = $media->getBinaryContent();
         if ($binaryContent instanceof File) {
             $path = $binaryContent->getRealPath() ?: $binaryContent->getPathname();
-            $symfonyFilesystem->copy($path, $_SERVER['DOCUMENT_ROOT'] . '/uploads/media/' . $pathToMove);
-            $symfonyFilesystem->remove($path);
+
+            $filesystem->copy($path, "{$this->directory}/{$pathToMove}");
+            $filesystem->remove($path);
 
             return;
         }
@@ -475,7 +479,7 @@ class LargeFileProvider extends BaseProvider
 
         if (!$extension) {
             throw new \RuntimeException(
-            sprintf('Unable to guess extension for content type %s', $media->getContentType())
+                sprintf('Unable to guess extension for content type %s', $media->getContentType())
             );
         }
 

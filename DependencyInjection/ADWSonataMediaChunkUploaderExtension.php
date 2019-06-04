@@ -6,12 +6,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
 /**
  * Class ADWSonataMediaChunkUploaderExtension
  * @package ADW\SonataMediaChunkUploader\DependencyInjection
  */
-class ADWSonataMediaChunkUploaderExtension extends Extension
+class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var array $storageServices
@@ -44,6 +45,20 @@ class ADWSonataMediaChunkUploaderExtension extends Extension
 
         $container->setParameter('adw.sonata.chunks.settings', $this->config['chunks']);
         $this->registerStorageService();
+    }
+
+    public function prepend(ContainerBuilder $container)
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['SonataMediaBundle'])) {
+            $sonataMediaConfig = $container->getExtensionConfig('sonata_media')[0];
+
+            $directory = $sonataMediaConfig['filesystem']['local']['directory'];
+            $directory = null === $directory ? sprintf('%s/../web/uploads/media', $this->container->getParameter('kernel.root_dir')) : $directory;
+
+            $container->setParameter('sonata.media.adapter.filesystem.local.path', $directory);
+        }
     }
 
     protected function registerStorageService()

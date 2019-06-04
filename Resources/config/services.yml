@@ -25,6 +25,7 @@ services:
       - '@sonata.media.cdn.server'
       - '@sonata.media.generator.default'
       - '@sonata.media.thumbnail.format'
+      - '%sonata.media.adapter.filesystem.local.path%'
       - []
       - []
     calls:
