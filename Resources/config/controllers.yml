@@ -1,0 +1,5 @@
+services:
+  ADW\SonataMediaChunkUploader\Admin\Controller\ResumableUploadController:
+    public: true
+    arguments:
+      - '@adw.sonata.chunks.service'

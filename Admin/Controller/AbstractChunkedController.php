@@ -67,6 +67,9 @@ abstract class AbstractChunkedController extends AbstractController
                 $assembled = $chunkManager->assembleChunks($chunks, true, true);
             }
 
+            // Cleaning old chunks, age can be set in bundle configuration by parameter `maxage`.
+            $chunkManager->clear();
+
             return $assembled->getRealPath();
         }
     }

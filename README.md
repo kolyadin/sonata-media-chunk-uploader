@@ -39,6 +39,7 @@ adw_sonata_media_chunk_uploader:
     chunk_folder: "%kernel.root_dir%/../web/uploads/media/chunks" 
     chunk_size: 3000 # in bytes
     load_distribution: true
+    maxage: 604800
   storage:
     type: 'filesystem'
 ```

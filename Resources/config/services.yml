@@ -2,10 +2,12 @@ parameters:
   adw.sonata.chunks.storage.filesystem.class: ADW\SonataMediaChunkUploader\Storage\FilesystemStorage
 
 services:
+  ADW\SonataMediaChunkUploader\Service\ChunkService: '@adw.sonata.chunks.service'
+
   adw.sonata.chunks.service:
-    autowire: true
     class: ADW\SonataMediaChunkUploader\Service\ChunkService
     public: true
+    autowire: true
     arguments:
       - "%adw.sonata.chunks.settings%"
       - "@adw.sonata.chunks.storage"

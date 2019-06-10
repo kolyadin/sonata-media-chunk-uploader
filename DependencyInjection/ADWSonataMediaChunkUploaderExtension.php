@@ -32,6 +32,8 @@ class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependE
     /**
      * @param array            $configs
      * @param ContainerBuilder $container
+     *
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -42,6 +44,7 @@ class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependE
 
         $loader = new Loader\YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('controllers.yml');
 
         $container->setParameter('adw.sonata.chunks.settings', $this->config['chunks']);
         $this->registerStorageService();
