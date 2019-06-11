@@ -2,16 +2,18 @@
 
 namespace ADW\SonataMediaChunkUploader\Form\Type;
 
+use App\Application\Sonata\MediaBundle\Entity\Media;
+use Sonata\MediaBundle\Form\DataTransformer\ProviderDataTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Sonata\MediaBundle\Form\Type\MediaType;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * Class LargeMediaType
@@ -40,11 +42,25 @@ class LargeMediaType extends MediaType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('context', HiddenType::class, ['data' => $options['context'] ?? 'default'])
-            ->add('providerName', HiddenType::class, ['data' => $options['provider']])
-            ->add('file', HiddenType::class, ['mapped' => false])
-            ->add('binaryContent', FileType::class);
+        $dataTransformer = new ProviderDataTransformer($this->pool, $this->class, [
+            'provider'      => $options['provider'],
+            'context'       => $options['context'],
+            'empty_on_new'  => $options['empty_on_new'],
+            'new_on_update' => $options['new_on_update'],
+        ]);
+
+        $dataTransformer->setLogger($this->logger);
+
+        $builder->addModelTransformer($dataTransformer);
+        $builder->add('file', HiddenType::class, ['mapped' => false]);
+        $builder->add('unlink', CheckboxType::class, [
+            'label' => 'widget_label_unlink',
+            'mapped' => false,
+            'data' => false,
+            'required' => false,
+        ]);
+
+        $this->pool->getProvider($options['provider'])->buildMediaType($builder);
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
@@ -56,6 +72,23 @@ class LargeMediaType extends MediaType
             }
         });
 
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options) {
+            if ($event->getForm()->has('unlink') && $event->getForm()->get('unlink')->getData()) {
+                $event->setData(null);
+                /** @var Media $media */
+                $media = $event->getForm()->getNormData();
+
+                if($media instanceof Media and $media->getId()) {
+                    try {
+                        $pathToDelete = $this->pool->getProvider($options['provider'])->getReferenceFile($media);
+                        $pathToDelete->delete();
+                    } catch (\Exception $exception) {
+                        // log
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -63,11 +96,18 @@ class LargeMediaType extends MediaType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-           'data_class' => $this->class,
-           'provider' => '',
-           'context' => 'default',
-        ]);
+        $resolver
+            ->setDefaults([
+                'data_class' => $this->class,
+                'empty_on_new' => true,
+                'new_on_update' => true,
+                'translation_domain' => 'SonataMediaBundle',
+            ])
+            ->setRequired(['provider', 'context'])
+            ->setAllowedTypes('provider', 'string')
+            ->setAllowedTypes('context', 'string')
+            ->setAllowedValues('provider', $this->pool->getProviderList())
+            ->setAllowedValues('context', array_keys($this->pool->getContexts()));
     }
 
     /**
