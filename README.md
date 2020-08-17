@@ -5,23 +5,14 @@ sonata media provider (fixed issue with memory) `sonata.media.provider.large_fil
 
 ## Installation
 
-Add repository to composer.json:
 ```
-"repositories": [
-    {"type": "vcs", "url": "https://gitlab.cloud.isobar.ru/reusable/sonata-media-chunk-uploader.git"}        
-]
-```
-
-Use composer to require package:
-```
-# bash
-composer require adw/sonata-media-chunk-uploader dev-master
+composer require kolyadin/sonata-media-chunk-uploader:*
 ```
 
 Add routes:
 ```
-adw_chunk_uploader:
-    resource: "@ADWSonataMediaChunkUploaderBundle/Admin/Controller/"
+chunk_uploader:
+    resource: "@SonataMediaChunkUploaderBundle/Admin/Controller/"
     type:     annotation
 ```
 
@@ -29,12 +20,12 @@ Add custom widget to twig config:
 ```
 twig:
     form_themes:
-        - '@ADWSonataMediaChunkUploader/Form/fields.html.twig'
+        - '@SonataMediaChunkUploader/Form/fields.html.twig'
 ```
 
 ## Configuration (optional)
 ```
-adw_sonata_media_chunk_uploader:
+sonata_media_chunk_uploader:
   chunks:
     chunk_folder: "%kernel.root_dir%/../web/uploads/media/chunks" 
     chunk_size: 3000 # in bytes
