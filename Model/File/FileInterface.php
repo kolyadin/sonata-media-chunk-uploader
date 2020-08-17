@@ -1,6 +1,6 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Model\File;
+namespace Kolyadin\SonataMediaChunkUploader\Model\File;
 
 /**
  * Every function in this interface should be considered unsafe.

@@ -1,6 +1,6 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Form\Type;
+namespace Kolyadin\SonataMediaChunkUploader\Form\Type;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use Sonata\MediaBundle\Form\DataTransformer\ProviderDataTransformer;
@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * Class LargeMediaType
- * @package ADW\SonataMediaChunkUploader\Form\Type
+ * @package Kolyadin\SonataMediaChunkUploader\Form\Type
  */
 class LargeMediaType extends MediaType
 {
@@ -123,7 +123,7 @@ class LargeMediaType extends MediaType
      */
     public function getBlockPrefix()
     {
-        return 'adw_large_media';
+        return 'large_media';
     }
 
     /**

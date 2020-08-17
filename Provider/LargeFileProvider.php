@@ -1,10 +1,10 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Provider;
+namespace Kolyadin\SonataMediaChunkUploader\Provider;
 
 use Gaufrette\Filesystem;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\MediaBundle\CDN\CDNInterface;
 use Sonata\MediaBundle\Extra\ApiMediaFile;
 use Sonata\MediaBundle\Filesystem\Local;
@@ -30,7 +30,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * Class LargeFileProvider
- * @package ADW\SonataMediaChunkUploader\Provider
+ * @package Kolyadin\SonataMediaChunkUploader\Provider
  */
 class LargeFileProvider extends BaseProvider
 {

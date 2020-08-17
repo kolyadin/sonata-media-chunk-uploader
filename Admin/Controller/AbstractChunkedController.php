@@ -1,16 +1,16 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Admin\Controller;
+namespace Kolyadin\SonataMediaChunkUploader\Admin\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use ADW\SonataMediaChunkUploader\Service\ChunkServiceInterface;
+use Kolyadin\SonataMediaChunkUploader\Service\ChunkServiceInterface;
 
 /**
  * Class AbstractChunkedController
- * @package ADW\SonataMediaChunkUploader\Admin\Controller
+ * @package Kolyadin\SonataMediaChunkUploader\Admin\Controller
  */
 abstract class AbstractChunkedController extends AbstractController
 {

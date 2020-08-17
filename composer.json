@@ -1,12 +1,12 @@
 {
-  "name": "adw/sonata-media-chunk-uploader",
+  "name": "kolyadin/sonata-media-chunk-uploader",
   "description": "A bundle which allows you to load large files by chunks in Sonata media.",
   "license": "proprietary",
   "type": "symfony-bundle",
   "authors": [
     {
-      "name": "Basov Denis",
-      "email": "Denis.Basov@isobar.ru"
+      "name": "Aleksey Kolyadin",
+      "email": "aleksey@kolyadin.ru"
     }
   ],
   "require": {
@@ -14,10 +14,14 @@
     "sonata-project/admin-bundle": "^3.35",
     "sonata-project/media-bundle": "^3.18",
     "sonata-project/core-bundle": "^3.14"
+  }
+  ,
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
   },
   "autoload": {
     "psr-4": {
-      "ADW\\SonataMediaChunkUploader\\": ""
+      "Kolyadin\\SonataMediaChunkUploader\\": ""
     }
   }
 }

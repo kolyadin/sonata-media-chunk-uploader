@@ -1,68 +1,59 @@
-{% block adw_large_media_widget %}
+{% block large_media_widget %}
 
-    <script src="{{ asset('bundles/adwsonatamediachunkuploader/resumable.js') }}"></script>
+    <script src="{{ asset('bundles/sonatamediachunkuploader/resumable.js') }}"></script>
 
-    <div class="row">
-        <div class="col-md-4 pull-left">
-            {% if value is not empty and value.providerReference %}
-                {% if sonata_admin_enabled is defined and sonata_admin_enabled and sonata_admin.admin is not same as(false) %}
-                    <a href="{{ sonata_admin.admin.getConfigurationPool().adminByAdminCode('sonata.media.admin.media').generateObjectUrl('edit', value) }}">
-                        <strong>{{ value.name }}</strong>
-                    </a>
-                {% else %}
-                    <strong>{{ value.name }}</strong>
-                {% endif %}
-            {% else %}
-                <strong>{{ 'no_linked_media'|trans({}, 'SonataMediaBundle') }}</strong>
-            {% endif %}
-        </div>
+    {#    <div class="row">#}
+    {#        <div class="col-md-4 pull-left">#}
+    {#            {% if value is not empty and value.providerReference %}#}
+    {#                {% if sonata_admin_enabled is defined and sonata_admin_enabled and sonata_admin.admin is not same as(false) %}#}
+    {#                    <a href="{{ sonata_admin.admin.getConfigurationPool().adminByAdminCode('sonata.media.admin.media').generateObjectUrl('edit', value) }}">#}
+    {#                        <strong>{{ value.name }}</strong>#}
+    {#                    </a>#}
+    {#                {% else %}#}
+    {#                    <strong>{{ value.name }}</strong>#}
+    {#                {% endif %}#}
+    {#            {% else %}#}
+    {#                <strong>{{ 'no_linked_media'|trans({}, 'SonataMediaBundle') }}</strong>#}
+    {#            {% endif %}#}
+    {#        </div>#}
 
-        <div class="col-md-3 pull-left"><strong>{{ 'widget_headline_information'|trans({}, 'SonataMediaBundle') }}</strong></div>
-        <div class="col-md-2 pull-left"><strong>{{ 'link_media'|trans({}, 'SonataMediaBundle') }}</strong></div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 pull-left">
-            {% if value is not empty and value.providerReference %}
-                <div class="pull-left" style="margin-right: 5px">
-                    {% thumbnail value, 'admin' with {'class': 'img-polaroid media-object'} %}
+    {#        <div class="col-md-3 pull-left"><strong>{{ 'widget_headline_information'|trans({}, 'SonataMediaBundle') }}</strong></div>#}
+    {#        <div class="col-md-2 pull-left"><strong>{{ 'link_media'|trans({}, 'SonataMediaBundle') }}</strong></div>#}
+    {#    </div>#}
+
+    {% if value is not empty and value.providerReference %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pull-left">
+                    <video src="{% path value, 'reference' %}" controls width="100%"></video>
                 </div>
-            {% else %}
-                <div class="pull-left" style="margin-right: 5px">
-                    <img src="{{ asset('bundles/sonatamedia/grey.png') }}" class="img-polaroid media-object" style="width: 85px; height: 85px"/>
+            </div>
+            <div class="col-md-6">
+                {{ block('form_widget') }}
+                <div class="alert alert-success hide" role="alert" id="uploaded-file">
+                    File <strong></strong> successfully loaded!
                 </div>
-            {% endif %}
-        </div>
-        <div class="col-md-3 pull-left">
-            {% if value is not empty and value.providerReference %}
-                <strong>{{ 'widget_label_type'|trans({}, 'SonataMediaBundle') }}:</strong> <span type="label">{{ value.providerName|trans({}, 'SonataMediaBundle') }}</span>
-                <br />
-                <strong>{{ 'widget_label_context'|trans({}, 'SonataMediaBundle') }}:</strong> <span type="label">{{ value.context|trans({}, 'SonataMediaBundle') }}</span>
-            {% else %}
-                <strong>{{ 'widget_label_type'|trans({}, 'SonataMediaBundle') }}:</strong> <span type="label">{{ form.vars['provider']|trans({}, 'SonataMediaBundle') }}</span>
-                <br />
-                <strong>{{ 'widget_label_context'|trans({}, 'SonataMediaBundle') }}:</strong> <span type="label">{{ form.vars['context']|trans({}, 'SonataMediaBundle') }}</span>
-            {% endif %}
-        </div>
-        <div class="col-md-2 pull-left">
-            {{ block('form_widget') }}
-                <p>
-                    <div class="alert alert-success hide" role="alert" id="uploaded-file">
-                        File <strong></strong> successfully loaded!
-                    </div>
-                </p>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-12">
+                {{ block('form_widget') }}
+                <div class="alert alert-success hide" role="alert" id="uploaded-file">
+                    File <strong></strong> successfully loaded!
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 
     <div class="row">
         <div class="col-lg-8">
-            <p>
-                <div class="progress hide" id="upload-progress">
-                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: 0%">
-                        <span class="sr-only"></span>
-                    </div>
+            <div class="progress hide" id="upload-progress">
+                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: 0%">
+                    <span class="sr-only"></span>
                 </div>
-            </p>
+            </div>
         </div>
     </div>
 
@@ -75,7 +66,7 @@
             var uploadedFileInput = $('#{{ form.children.file.vars.id }}');
 
             var r = new Resumable({
-                target: '{{ path('adw.chunks.upload') }}',
+                target: '{{ path('chunks.upload') }}',
                 maxFiles: 1,
                 testChunks: false,
                 query: {context: '{{ form.vars['context'] }}', provider: '{{ form.vars['provider'] }}'}
@@ -113,13 +104,13 @@
                     (this.thisEle).removeClass('hide').find('.progress-bar').css('width','0%');
                 },
 
-                this.uploading = function(progress) {
-                    (this.thisEle).find('.progress-bar').attr('style', "width:"+progress+'%');
-                },
+                    this.uploading = function(progress) {
+                        (this.thisEle).find('.progress-bar').attr('style', "width:"+progress+'%');
+                    },
 
-                this.finish = function() {
-                    (this.thisEle).addClass('hide').find('.progress-bar').css('width','0%');
-                }
+                    this.finish = function() {
+                        (this.thisEle).addClass('hide').find('.progress-bar').css('width','0%');
+                    }
             }
         });
     </script>

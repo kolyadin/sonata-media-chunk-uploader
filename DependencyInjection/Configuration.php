@@ -1,6 +1,6 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\DependencyInjection;
+namespace Kolyadin\SonataMediaChunkUploader\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -9,11 +9,11 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('adw_chunk_uploader');
+        $treeBuilder = new TreeBuilder('chunk_uploader');
 
         // Keep compatibility with symfony/config < 4.2
         if (!method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->root('adw_chunk_uploader');
+            $rootNode = $treeBuilder->root('chunk_uploader');
         } else {
             $rootNode = $treeBuilder->getRootNode();
         }

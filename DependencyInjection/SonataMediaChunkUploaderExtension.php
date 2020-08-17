@@ -1,6 +1,6 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\DependencyInjection;
+namespace Kolyadin\SonataMediaChunkUploader\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -9,10 +9,10 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
 /**
- * Class ADWSonataMediaChunkUploaderExtension
- * @package ADW\SonataMediaChunkUploader\DependencyInjection
+ * Class SonataMediaChunkUploaderExtension
+ * @package Kolyadin\SonataMediaChunkUploader\DependencyInjection
  */
-class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependExtensionInterface
+class SonataMediaChunkUploaderExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var array $storageServices
@@ -46,7 +46,7 @@ class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependE
         $loader->load('services.yml');
         $loader->load('controllers.yml');
 
-        $container->setParameter('adw.sonata.chunks.settings', $this->config['chunks']);
+        $container->setParameter('sonata.chunks.settings', $this->config['chunks']);
         $this->registerStorageService();
     }
 
@@ -66,14 +66,14 @@ class ADWSonataMediaChunkUploaderExtension extends Extension implements PrependE
 
     protected function registerStorageService()
     {
-        $storageClass = sprintf('%%adw.sonata.chunks.storage.%s.class%%', $this->config['storage']['type']);
+        $storageClass = sprintf('%%sonata.chunks.storage.%s.class%%', $this->config['storage']['type']);
         $folder       = $this->config['chunks']['chunk_folder'];
 
         switch ($this->config['storage']['type']) {
             case 'filesystem':
                 $folder = null === $folder ? sprintf('%s/uploader/chunks', $this->container->getParameter('kernel.cache_dir')) : $folder;
 
-                $this->container->register('adw.sonata.chunks.storage', $storageClass)->addArgument($folder)->setPublic(true);
+                $this->container->register('sonata.chunks.storage', $storageClass)->addArgument($folder)->setPublic(true);
 
                 break;
 

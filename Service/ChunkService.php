@@ -1,13 +1,13 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Service;
+namespace Kolyadin\SonataMediaChunkUploader\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use ADW\SonataMediaChunkUploader\Storage\ChunkStorageInterface;
+use Kolyadin\SonataMediaChunkUploader\Storage\ChunkStorageInterface;
 
 /**
  * Class ChunkService
- * @package ADW\SonataMediaChunkUploader\Service
+ * @package Kolyadin\SonataMediaChunkUploader\Service
  */
 class ChunkService implements ChunkServiceInterface
 {

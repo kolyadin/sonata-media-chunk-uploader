@@ -1,8 +1,8 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Storage;
+namespace Kolyadin\SonataMediaChunkUploader\Storage;
 
-use ADW\SonataMediaChunkUploader\Model\File\FilesystemFile;
+use Kolyadin\SonataMediaChunkUploader\Model\File\FilesystemFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class FilesystemStorage
- * @package ADW\SonataMediaChunkUploader\Storage
+ * @package Kolyadin\SonataMediaChunkUploader\Storage
  */
 class FilesystemStorage implements ChunkStorageInterface
 {

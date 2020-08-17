@@ -1,17 +1,17 @@
 <?php
 
-namespace ADW\SonataMediaChunkUploader\Admin\Controller;
+namespace Kolyadin\SonataMediaChunkUploader\Admin\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use ADW\SonataMediaChunkUploader\Service\ChunkService;
+use Kolyadin\SonataMediaChunkUploader\Service\ChunkService;
 
 /**
  * Class ResumableUploadController
- * @package ADW\SonataMediaChunkUploader\Admin\Controller
- * @Route("/admin/adw/chunks")
+ * @package Kolyadin\SonataMediaChunkUploader\Admin\Controller
+ * @Route("/admin/chunks")
  */
 class ResumableUploadController extends AbstractChunkedController
 {
@@ -24,7 +24,7 @@ class ResumableUploadController extends AbstractChunkedController
     }
 
     /**
-     * @Route("/upload", name="adw.chunks.upload", methods={"POST"})
+     * @Route("/upload", name="chunks.upload", methods={"POST"})
      *
      * @param Request $request
      *

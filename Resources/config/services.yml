@@ -1,24 +1,24 @@
 parameters:
-  adw.sonata.chunks.storage.filesystem.class: ADW\SonataMediaChunkUploader\Storage\FilesystemStorage
+  sonata.chunks.storage.filesystem.class: Kolyadin\SonataMediaChunkUploader\Storage\FilesystemStorage
 
 services:
-  ADW\SonataMediaChunkUploader\Service\ChunkService: '@adw.sonata.chunks.service'
+  Kolyadin\SonataMediaChunkUploader\Service\ChunkService: '@sonata.chunks.service'
 
-  adw.sonata.chunks.service:
-    class: ADW\SonataMediaChunkUploader\Service\ChunkService
+  sonata.chunks.service:
+    class: Kolyadin\SonataMediaChunkUploader\Service\ChunkService
     public: true
     autowire: true
     arguments:
-      - "%adw.sonata.chunks.settings%"
-      - "@adw.sonata.chunks.storage"
+      - "%sonata.chunks.settings%"
+      - "@sonata.chunks.storage"
 
-  adw.sonata.chunks.form.large_media:
-    class: ADW\SonataMediaChunkUploader\Form\Type\LargeMediaType
+  sonata.chunks.form.large_media:
+    class: Kolyadin\SonataMediaChunkUploader\Form\Type\LargeMediaType
     arguments: ['@sonata.media.pool', "%sonata.media.media.class%"]
     tags: [form.type]
 
   sonata.media.provider.large_file:
-    class: ADW\SonataMediaChunkUploader\Provider\LargeFileProvider
+    class: Kolyadin\SonataMediaChunkUploader\Provider\LargeFileProvider
     tags:
       - { name: sonata.media.provider }
     arguments:
